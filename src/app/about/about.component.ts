@@ -3,6 +3,8 @@ import 'firebase/firestore';
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 
+import { Course } from '../model/course';
+
 var config = {
   apiKey: 'AIzaSyBBLNRK6pJ5VljkzAFYNGQuRiQAS2BtQeo',
   authDomain: 'fir-course-5ca52.firebaseapp.com',
@@ -30,12 +32,17 @@ export class AboutComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    db.doc('courses/PpCHCR8ZKAOq8s0emq3j')
+    db.collection('courses')
       .get()
-      .then(snap => {
-        const data: any = snap.data();
-        data.id = snap.id;
-        console.log(data);
+      .then(snaps => {
+        const courses: Course[] = snaps.docs.map(snap => {
+          return <Course>{
+            id: snap.id,
+            ...snap.data()
+          };
+        });
+
+        console.log(courses);
       });
   }
 }
