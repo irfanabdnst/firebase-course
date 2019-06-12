@@ -52,4 +52,6 @@ export class CourseService {
         first()
       );
   }
+
+  saveCourse(courseId: string, data: Partial<Course>): Observable<any> {}
 }
