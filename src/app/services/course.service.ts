@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
 import { Course } from '../model/course';
+import { convertSnaps } from './db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,22 @@ export class CourseService {
       .snapshotChanges()
       .pipe(
         map(snaps => {
-          return snaps.map(snap => {
-            return {
-              id: snap.payload.doc.id,
-              ...snap.payload.doc.data()
-            } as Course;
-          });
+          return convertSnaps<Course>(snaps);
         }),
         first() // Not live stream to database
+      );
+  }
+
+  findCourseByUrl(courseUrl: string): Observable<Course> {
+    return this.db
+      .collection('courses', ref => ref.where('url', '==', courseUrl))
+      .snapshotChanges()
+      .pipe(
+        map(snaps => {
+          const courses = convertSnaps<Course>(snaps);
+          return courses.length == 1 ? courses[0] : undefined;
+        }),
+        first()
       );
   }
 }
