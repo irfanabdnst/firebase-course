@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
 import { Course } from '../model/course';
+import { Lesson } from '../model/lesson';
 import { convertSnaps } from './db-utils';
 
 @Injectable({
@@ -33,6 +34,21 @@ export class CourseService {
           const courses = convertSnaps<Course>(snaps);
           return courses.length == 1 ? courses[0] : undefined;
         }),
+        first()
+      );
+  }
+
+  findLessons(courseId: string, sortOrder: 'asc' | 'desc' = 'asc', pageNumber = 0, pageSize = 3): Observable<Lesson[]> {
+    return this.db
+      .collection(`courses/${courseId}/lessons`, ref =>
+        ref
+          .orderBy('seqNo', sortOrder)
+          .limit(pageSize)
+          .startAfter(pageNumber * pageSize)
+      )
+      .snapshotChanges()
+      .pipe(
+        map(snaps => convertSnaps<Lesson>(snaps)),
         first()
       );
   }
