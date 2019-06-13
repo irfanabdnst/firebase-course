@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
 import { Course } from '../model/course';
@@ -53,5 +53,7 @@ export class CourseService {
       );
   }
 
-  saveCourse(courseId: string, data: Partial<Course>): Observable<any> {}
+  saveCourse(courseId: string, changes: Partial<Course>): Observable<any> {
+    return from(this.db.doc(`courses/${courseId}`).update(changes));
+  }
 }
