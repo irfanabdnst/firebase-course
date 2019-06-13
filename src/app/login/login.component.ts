@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     const uiConfig = {
       signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.EmailAuthProvider.PROVIDER_ID],
-      callBacks: {
-        signSuccessWithAuthResult: this.onLoginSuccessful.bind(this)
+      callbacks: {
+        signInSuccessWithAuthResult: this.onLoginSuccessful.bind(this)
       }
     };
 
