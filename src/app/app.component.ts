@@ -23,6 +23,9 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.afAuth.auth.signOut().then(() => this.router.navigateByUrl('login'));
+    this.afAuth.auth.signOut().then(() => {
+      localStorage.removeItem('firebaseui::rememberedAccounts');
+      this.router.navigateByUrl('/login');
+    });
   }
 }
