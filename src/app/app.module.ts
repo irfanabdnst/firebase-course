@@ -73,7 +73,7 @@ import { CourseResolver } from './services/course.resolver';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     AngularFireStorageModule
   ],
   providers: [CourseResolver],
